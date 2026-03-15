@@ -1,19 +1,33 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { db } from "@/lib/db";
-import { projects as projectsTable } from "@/lib/schema";
-import { eq } from "drizzle-orm";
+import { getProject, getProjects } from "@/lib/content";
+import { marked } from "marked";
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const project = getProject(slug);
+  if (!project) return {};
+  return {
+    title: project.title,
+    description: project.description,
+    openGraph: { title: project.title, description: project.description },
+    twitter: { title: project.title, description: project.description },
+  };
+}
+
+export async function generateStaticParams() {
+  return getProjects().map((p) => ({ slug: p.slug }));
+}
 
 export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const row = db.select().from(projectsTable).where(eq(projectsTable.slug, slug)).get();
-  if (!row) notFound();
-  const project = { ...row, tags: JSON.parse(row.tags) as string[] };
+  const project = getProject(slug);
+  if (!project) notFound();
 
-  const lines = project.body.trim().split("\n");
+  const bodyHtml = marked(project.body) as string;
 
   return (
-    <main style={{ padding: "72px 48px", maxWidth: "800px", margin: "0 auto" }}>
+    <main className="page-pad" style={{ paddingTop: "72px", paddingBottom: "72px", maxWidth: "800px", margin: "0 auto" }}>
       <Link
         href="/projects"
         style={{ fontSize: "13px", color: "var(--gray)", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "6px", marginBottom: "40px" }}
@@ -21,13 +35,12 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         ← all projects
       </Link>
 
-      {/* Header */}
       <div style={{ marginBottom: "40px" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "16px" }}>
           <span style={{ fontSize: "11px", fontWeight: 700, color: "var(--gray)", letterSpacing: "1px" }}>
             {project.year}
           </span>
-          <div style={{ display: "flex", gap: "6px" }}>
+          <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
             {project.tags.map((t) => (
               <span key={t} style={{ fontSize: "11px", fontWeight: 600, padding: "2px 10px", borderRadius: "999px", background: "var(--red-light)", color: "var(--red)" }}>
                 {t}
@@ -54,48 +67,22 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         </p>
       </div>
 
-      {/* Links */}
       {(project.liveUrl || project.githubUrl) && (
-        <div style={{ display: "flex", gap: "16px", marginBottom: "48px", paddingBottom: "40px", borderBottom: "1.5px solid var(--border)" }}>
+        <div style={{ display: "flex", gap: "12px", marginBottom: "48px", paddingBottom: "40px", borderBottom: "1.5px solid var(--border)", flexWrap: "wrap" }}>
           {project.liveUrl && (
-            <Link href={project.liveUrl} style={{ background: "var(--red)", color: "white", padding: "10px 22px", borderRadius: "8px", fontSize: "13px", fontWeight: 600, textDecoration: "none" }}>
+            <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" style={{ background: "var(--red)", color: "white", padding: "10px 22px", borderRadius: "999px", fontSize: "13px", fontWeight: 600, textDecoration: "none" }}>
               Live site ↗
-            </Link>
+            </a>
           )}
           {project.githubUrl && (
-            <Link href={project.githubUrl} style={{ border: "1.5px solid var(--border)", color: "var(--black)", padding: "10px 22px", borderRadius: "8px", fontSize: "13px", fontWeight: 600, textDecoration: "none" }}>
+            <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" style={{ border: "1.5px solid var(--border)", color: "var(--black)", padding: "10px 22px", borderRadius: "999px", fontSize: "13px", fontWeight: 600, textDecoration: "none" }}>
               GitHub →
-            </Link>
+            </a>
           )}
         </div>
       )}
 
-      {/* Body rendered from plain text/markdown-like */}
-      <article style={{ fontSize: "15px", lineHeight: 1.8, color: "#374151" }}>
-        {lines.map((line, i) => {
-          if (line.startsWith("## ")) {
-            return (
-              <h2
-                key={i}
-                style={{
-                  fontFamily: "var(--font-playfair)",
-                  fontSize: "26px",
-                  fontWeight: 900,
-                  letterSpacing: "-0.5px",
-                  color: "var(--black)",
-                  marginTop: "40px",
-                  marginBottom: "12px",
-                }}
-              >
-                {line.replace("## ", "")}
-              </h2>
-            );
-          }
-          if (line.startsWith("```")) return null;
-          if (line.trim() === "") return <br key={i} />;
-          return <p key={i} style={{ marginBottom: "4px" }}>{line}</p>;
-        })}
-      </article>
+      <article className="prose" dangerouslySetInnerHTML={{ __html: bodyHtml }} />
     </main>
   );
 }

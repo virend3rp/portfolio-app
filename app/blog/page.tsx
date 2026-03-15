@@ -1,6 +1,5 @@
 import Link from "next/link";
-import { db } from "@/lib/db";
-import { blogPosts as blogPostsTable } from "@/lib/schema";
+import { getBlogPosts } from "@/lib/content";
 
 const thumbnailGradients = [
   "linear-gradient(135deg, #1a0a2e 0%, #2d1b4e 60%, #0f0f2e 100%)",
@@ -9,9 +8,9 @@ const thumbnailGradients = [
 ];
 
 export default function Blog() {
-  const blogPosts = db.select().from(blogPostsTable).all();
+  const blogPosts = getBlogPosts();
   return (
-    <main style={{ padding: "40px 48px 72px", maxWidth: "1200px", margin: "0 auto" }}>
+    <main className="page-pad" style={{ paddingTop: "40px", paddingBottom: "72px", maxWidth: "1200px", margin: "0 auto" }}>
       <div style={{ marginBottom: "28px" }}>
         <h1
           style={{
@@ -28,52 +27,40 @@ export default function Blog() {
         <p style={{ fontSize: "13px", color: "var(--gray)" }}>things I figured out, or am still figuring out</p>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "24px" }}>
+      <div className="grid-3">
         {blogPosts.map((post, i) => (
           <Link key={post.slug} href={`/blog/${post.slug}`} style={{ textDecoration: "none", color: "inherit" }}>
-            <div style={{ cursor: "pointer" }}>
-              {/* Thumbnail */}
+            <div className="card-hover" style={{ cursor: "pointer" }}>
               <div
+                className="card-thumbnail"
                 style={{
                   aspectRatio: "16/9",
                   background: thumbnailGradients[i % thumbnailGradients.length],
                   borderRadius: "12px",
                   position: "relative",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
                   marginBottom: "12px",
                   overflow: "hidden",
                 }}
               >
-                {/* Play button */}
-                <div
-                  style={{
-                    width: "52px",
-                    height: "52px",
-                    borderRadius: "50%",
-                    background: "var(--red)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <div
-                    style={{
-                      width: 0,
-                      height: 0,
-                      borderTop: "10px solid transparent",
-                      borderBottom: "10px solid transparent",
-                      borderLeft: "18px solid white",
-                      marginLeft: "5px",
-                    }}
-                  />
-                </div>
-                {/* Tag badge */}
                 <div
                   style={{
                     position: "absolute",
-                    bottom: "10px",
+                    inset: 0,
+                    padding: "16px",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "flex-end",
+                    background: "linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 60%)",
+                  }}
+                >
+                  <div style={{ fontSize: "12px", fontWeight: 700, color: "white", lineHeight: 1.35, textShadow: "0 1px 4px rgba(0,0,0,0.5)" }}>
+                    {post.title}
+                  </div>
+                </div>
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "10px",
                     left: "10px",
                     background: "var(--red)",
                     color: "white",
@@ -89,7 +76,6 @@ export default function Blog() {
                 </div>
               </div>
 
-              {/* Info */}
               <div style={{ fontSize: "11px", color: "var(--gray)", marginBottom: "5px" }}>{post.date}</div>
               <div style={{ fontSize: "15px", fontWeight: 700, lineHeight: 1.4, letterSpacing: "-0.3px", marginBottom: "5px" }}>
                 {post.title}

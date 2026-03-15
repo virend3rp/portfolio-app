@@ -1,18 +1,33 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { db } from "@/lib/db";
-import { blogPosts as blogPostsTable } from "@/lib/schema";
-import { eq } from "drizzle-orm";
+import { getBlogPost, getBlogPosts } from "@/lib/content";
+import { marked } from "marked";
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const post = getBlogPost(slug);
+  if (!post) return {};
+  return {
+    title: post.title,
+    description: post.excerpt,
+    openGraph: { title: post.title, description: post.excerpt },
+    twitter: { title: post.title, description: post.excerpt },
+  };
+}
+
+export async function generateStaticParams() {
+  return getBlogPosts().map((p) => ({ slug: p.slug }));
+}
 
 export default async function BlogPost({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const post = db.select().from(blogPostsTable).where(eq(blogPostsTable.slug, slug)).get();
+  const post = getBlogPost(slug);
   if (!post) notFound();
 
-  const lines = post.body.trim().split("\n");
+  const bodyHtml = marked(post.body) as string;
 
   return (
-    <main style={{ padding: "72px 48px", maxWidth: "720px", margin: "0 auto" }}>
+    <main className="page-pad" style={{ paddingTop: "72px", paddingBottom: "72px", maxWidth: "720px", margin: "0 auto" }}>
       <Link
         href="/blog"
         style={{ fontSize: "13px", color: "var(--gray)", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "6px", marginBottom: "40px" }}
@@ -48,31 +63,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
         </p>
       </div>
 
-      <article style={{ fontSize: "16px", lineHeight: 1.85, color: "#374151" }}>
-        {lines.map((line, i) => {
-          if (line.startsWith("## ")) {
-            return (
-              <h2
-                key={i}
-                style={{
-                  fontFamily: "var(--font-playfair)",
-                  fontSize: "28px",
-                  fontWeight: 900,
-                  letterSpacing: "-0.5px",
-                  color: "var(--black)",
-                  marginTop: "48px",
-                  marginBottom: "16px",
-                }}
-              >
-                {line.replace("## ", "")}
-              </h2>
-            );
-          }
-          if (line.startsWith("```")) return null;
-          if (line.trim() === "") return <br key={i} />;
-          return <p key={i} style={{ marginBottom: "6px" }}>{line}</p>;
-        })}
-      </article>
+      <article className="prose" dangerouslySetInnerHTML={{ __html: bodyHtml }} />
     </main>
   );
 }

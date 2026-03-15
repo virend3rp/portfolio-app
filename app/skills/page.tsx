@@ -25,7 +25,7 @@ export default function Skills() {
   return (
     <main>
       {/* Header */}
-      <section style={{ padding: "72px 48px 56px", maxWidth: "1100px", margin: "0 auto" }}>
+      <section className="page-pad" style={{ paddingTop: "72px", paddingBottom: "56px", maxWidth: "1100px", margin: "0 auto" }}>
         <div style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "2px", textTransform: "uppercase", color: "var(--red)", marginBottom: "8px" }}>
           Skills
         </div>
@@ -45,18 +45,16 @@ export default function Skills() {
       </section>
 
       {/* Editorial row layout — on cream */}
-      <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 48px 80px" }}>
+      <div className="page-pad" style={{ maxWidth: "1100px", margin: "0 auto", paddingBottom: "80px" }}>
         <div style={{ borderTop: "1.5px solid var(--border)" }}>
           {skillGroups.map((group, i) => (
             <div
               key={group.category}
+              className="skills-row"
               style={{
-                display: "grid",
-                gridTemplateColumns: "220px 1fr",
-                alignItems: "center",
+                alignItems: "start",
                 padding: "40px 0",
                 borderBottom: i < skillGroups.length - 1 ? "1.5px solid var(--border)" : "none",
-                gap: "48px",
               }}
             >
               {/* Category name */}

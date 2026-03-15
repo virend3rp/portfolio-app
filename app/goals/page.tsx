@@ -4,18 +4,16 @@ type Goal = {
 };
 
 const goals: Goal[] = [
-  { text: "get this portfolio live", status: "in-progress" },
-  { text: "ship something people actually pay for", status: "in-progress" },
-  { text: "go deep on agentic AI", status: "in-progress" },
-  { text: "grow the YouTube channel to 10k", status: "in-progress" },
-  { text: "build and deploy first full-stack app", status: "done" },
-  { text: "actually learn TypeScript", status: "done" },
-  { text: "publish an npm package", status: "done" },
-  { text: "start building in public", status: "done" },
-  { text: "write consistently — 12 posts in 2025", status: "pending" },
-  { text: "contribute to a real open source project", status: "pending" },
-  { text: "learn systems programming basics", status: "pending" },
-  { text: "speak at a dev event", status: "pending" },
+  { text: "visit LA", status: "pending" },
+  { text: "visit New York", status: "pending" },
+  { text: "one foreign trip with the amigos", status: "pending" },
+  { text: "hit 10CR", status: "pending" },
+  { text: "start a YouTube channel", status: "pending" },
+  { text: "YouTube hits 100k", status: "pending" },
+  { text: "finish all the books I've bought", status: "pending" },
+  { text: "get a FAANG job", status: "pending" },
+  { text: "fall in love", status: "pending" },
+  { text: "complete writing my book", status: "pending" },
 ];
 
 function GoalCard({ goal }: { goal: Goal }) {
@@ -91,7 +89,7 @@ function GoalCard({ goal }: { goal: Goal }) {
 
 export default function Goals() {
   return (
-    <main style={{ padding: "72px 48px", maxWidth: "1100px", margin: "0 auto" }}>
+    <main className="page-pad" style={{ paddingTop: "72px", paddingBottom: "72px", maxWidth: "1100px", margin: "0 auto" }}>
       <div style={{ marginBottom: "48px" }}>
         <div style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "2px", textTransform: "uppercase", color: "var(--red)", marginBottom: "8px" }}>
           Goals
@@ -111,15 +109,9 @@ export default function Goals() {
         <p style={{ fontSize: "14px", color: "var(--gray)" }}>keeping it honest, keeping it public</p>
       </div>
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
-          gap: "10px",
-        }}
-      >
-        {goals.map((goal, i) => (
-          <GoalCard key={i} goal={goal} />
+      <div className="grid-3" style={{ gap: "10px" }}>
+        {goals.map((goal) => (
+          <GoalCard key={goal.text} goal={goal} />
         ))}
       </div>
     </main>

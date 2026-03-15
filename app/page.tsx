@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 const now = {
   learning: "Agentic AI",
@@ -11,35 +12,43 @@ export default function Home() {
   return (
     <main>
       {/* Channel Banner */}
-      <div
-        style={{
-          width: "100%",
-          height: "200px",
-          background: "linear-gradient(135deg, #0f0f0f 0%, #1c1c1c 50%, #cc0000 100%)",
-        }}
-      />
+      <div style={{ width: "100%", height: "220px", position: "relative", overflow: "hidden" }}>
+        <Image
+          src="/final-banner.png"
+          alt="Banner"
+          fill
+          style={{ objectFit: "cover", objectPosition: "center 30%" }}
+          priority
+        />
+        {/* Red color grade */}
+        <div style={{ position: "absolute", inset: 0, background: "rgba(150,0,0,0.15)", mixBlendMode: "multiply" }} />
+        {/* Vignette */}
+        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.55) 100%)" }} />
+        {/* Bottom fade into page */}
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, transparent 50%, var(--bg) 100%)" }} />
+      </div>
 
       {/* Channel Header */}
-      <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 48px" }}>
+      <div className="page-pad" style={{ maxWidth: "1100px", margin: "0 auto" }}>
         {/* Avatar row — avatar overlaps banner, text sits below */}
-        <div style={{ marginTop: "-44px", marginBottom: "16px" }}>
+        <div style={{ marginTop: "-44px", marginBottom: "16px", position: "relative", zIndex: 1 }}>
           <div
             style={{
               width: "88px",
               height: "88px",
               borderRadius: "50%",
-              background: "var(--red)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontWeight: 900,
-              fontSize: "26px",
-              color: "white",
-              letterSpacing: "-1px",
               border: "4px solid var(--bg)",
+              overflow: "hidden",
+              flexShrink: 0,
             }}
           >
-            VP
+            <Image
+              src="/avatar-2.JPEG"
+              alt="Virender Parasariya"
+              width={88}
+              height={88}
+              style={{ objectFit: "cover", objectPosition: "center top", width: "100%", height: "100%" }}
+            />
           </div>
         </div>
 
@@ -101,7 +110,7 @@ export default function Home() {
             <em style={{ fontStyle: "italic", color: "var(--red)" }}>too deep.</em>
           </h2>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "40px", maxWidth: "900px", marginBottom: "40px" }}>
+          <div className="grid-2" style={{ maxWidth: "900px", marginBottom: "40px" }}>
             <div style={{ display: "flex", flexDirection: "column", gap: "16px", fontSize: "15px", lineHeight: 1.8, color: "#374151" }}>
               <p>
                 I&apos;m Virender. Developer and content creator. When I pick something up I don&apos;t dabble — I go all the way in. That&apos;s happened with sports, with anime, with films, and now with code and building an audience online.
@@ -120,34 +129,51 @@ export default function Home() {
             </div>
           </div>
 
-          <div style={{ display: "flex", gap: "20px", alignItems: "center", flexWrap: "wrap" }}>
+          <div style={{ display: "flex", gap: "10px", alignItems: "center", flexWrap: "wrap" }}>
             <Link
               href="/projects"
-              style={{ background: "var(--red)", color: "white", padding: "12px 26px", borderRadius: "8px", fontSize: "13px", fontWeight: 600, textDecoration: "none" }}
+              style={{ background: "var(--red)", color: "white", padding: "10px 22px", borderRadius: "999px", fontSize: "13px", fontWeight: 700, textDecoration: "none" }}
             >
-              see the work
+              See the work
             </Link>
             {[
-              { label: "YouTube", href: "#" },
-              { label: "GitHub", href: "#" },
-              { label: "Twitter", href: "#" },
-              { label: "Letterboxd", href: "#" },
+              { label: "YouTube", href: "https://www.youtube.com/@virenderparasariya" },
+              { label: "GitHub", href: "https://github.com/virend3rp" },
+              { label: "Instagram", href: "https://www.instagram.com/virender_parasariya/" },
+              { label: "LinkedIn", href: "https://www.linkedin.com/in/virender-parasariya-120b7a379/" },
+              { label: "Letterboxd", href: "https://letterboxd.com/VirenderP/" },
+              { label: "LeetCode", href: "https://leetcode.com/u/Vir3nd3rp/" },
             ].map((l) => (
-              <Link key={l.label} href={l.href} style={{ color: "var(--gray)", fontSize: "13px", fontWeight: 500, textDecoration: "none" }}>
+              <a
+                key={l.label}
+                href={l.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  color: "var(--black)",
+                  fontSize: "13px",
+                  fontWeight: 500,
+                  textDecoration: "none",
+                  padding: "8px 16px",
+                  borderRadius: "999px",
+                  border: "1.5px solid var(--border)",
+                  background: "white",
+                  display: "inline-block",
+                }}
+              >
                 {l.label}
-              </Link>
+              </a>
             ))}
           </div>
         </section>
 
         {/* Now Strip */}
         <section
+          className="grid-now"
           style={{
             margin: "56px 0 0",
             padding: "32px 0 0",
             borderTop: "1.5px solid var(--border)",
-            display: "grid",
-            gridTemplateColumns: "repeat(4, 1fr)",
           }}
         >
           {[

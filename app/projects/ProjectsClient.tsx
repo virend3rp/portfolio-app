@@ -2,14 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import type { Project } from "@/lib/data";
-
-const thumbnailGradients = [
-  "linear-gradient(135deg, #0f0f0f 0%, #1c1c1c 60%, #1a0000 100%)",
-  "linear-gradient(135deg, #0d1b2a 0%, #1b2838 60%, #0f3460 100%)",
-  "linear-gradient(135deg, #0d1f0d 0%, #1a3a1a 60%, #1f4a1f 100%)",
-  "linear-gradient(135deg, #1a1a0d 0%, #2a2a10 60%, #3a3310 100%)",
-];
+import Image from "next/image";
+import type { Project } from "@/lib/content";
 
 export default function ProjectsClient({
   projects,
@@ -25,7 +19,7 @@ export default function ProjectsClient({
     : projects;
 
   return (
-    <main style={{ padding: "40px 48px 72px", maxWidth: "1200px", margin: "0 auto" }}>
+    <main className="page-pad" style={{ paddingTop: "40px", paddingBottom: "72px", maxWidth: "1200px", margin: "0 auto" }}>
       {/* Header */}
       <div style={{ marginBottom: "24px" }}>
         <h1
@@ -84,54 +78,45 @@ export default function ProjectsClient({
       {filtered.length === 0 ? (
         <p style={{ color: "var(--gray)", fontSize: "14px" }}>no projects with that tag yet.</p>
       ) : (
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "24px" }}>
-          {filtered.map((p, i) => (
+        <div className="grid-3">
+          {filtered.map((p) => (
             <Link key={p.slug} href={`/projects/${p.slug}`} style={{ textDecoration: "none", color: "inherit" }}>
-              <div style={{ cursor: "pointer" }}>
+              <div className="card-hover" style={{ cursor: "pointer" }}>
                 {/* Thumbnail */}
                 <div
+                  className="card-thumbnail"
                   style={{
                     aspectRatio: "16/9",
-                    background: thumbnailGradients[i % thumbnailGradients.length],
                     borderRadius: "12px",
                     position: "relative",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
                     marginBottom: "12px",
                     overflow: "hidden",
+                    background: "#1a1a1a",
                   }}
                 >
-                  {/* Play button */}
+                  {p.thumbnail && (
+                    <Image
+                      src={p.thumbnail}
+                      alt={p.title}
+                      fill
+                      style={{ objectFit: "cover" }}
+                    />
+                  )}
+                  {/* Gradient overlay */}
                   <div
                     style={{
-                      width: "52px",
-                      height: "52px",
-                      borderRadius: "50%",
-                      background: "var(--red)",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
+                      position: "absolute",
+                      inset: 0,
+                      background: "linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 50%)",
                     }}
-                  >
-                    <div
-                      style={{
-                        width: 0,
-                        height: 0,
-                        borderTop: "10px solid transparent",
-                        borderBottom: "10px solid transparent",
-                        borderLeft: "18px solid white",
-                        marginLeft: "5px",
-                      }}
-                    />
-                  </div>
+                  />
                   {/* Year badge */}
                   <div
                     style={{
                       position: "absolute",
-                      bottom: "10px",
+                      top: "10px",
                       right: "10px",
-                      background: "rgba(0,0,0,0.85)",
+                      background: "rgba(0,0,0,0.6)",
                       color: "white",
                       fontSize: "11px",
                       fontWeight: 700,
