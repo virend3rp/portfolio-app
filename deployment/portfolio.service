@@ -4,8 +4,8 @@ After=network.target
 
 [Service]
 Type=simple
-User=ec2-user
-WorkingDirectory=/home/ec2-user/portfolio
+User=ubuntu
+WorkingDirectory=/home/ubuntu/portfolio
 ExecStart=/usr/bin/node .next/standalone/server.js
 Restart=always
 RestartSec=10

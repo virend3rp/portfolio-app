@@ -16,10 +16,10 @@ curl -fsSL https://rpm.nodesource.com/setup_20.x | sudo bash -
 sudo dnf install -y nodejs
 
 echo "==> Cloning repository..."
-git clone https://github.com/virend3rp/portfolio-app.git /home/ec2-user/portfolio || true
+git clone https://github.com/virend3rp/portfolio-app.git /home/ubuntu/portfolio || true
 
 echo "==> Building Next.js app..."
-cd /home/ec2-user/portfolio
+cd /home/ubuntu/portfolio
 npm ci
 npm run build
 
