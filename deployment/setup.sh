@@ -36,7 +36,7 @@ sudo nginx -t && sudo systemctl enable --now nginx && sudo systemctl reload ngin
 
 echo ""
 echo "==> Done! Next steps:"
-echo "  1. Point virenderparsariya.online A record to this EC2's public IP"
+echo "  1. Point virenderparasariya.online A record to this EC2's public IP"
 echo "  2. Install SSL:"
 echo "     sudo apt install -y certbot python3-certbot-nginx"
-echo "     sudo certbot --nginx -d virenderparsariya.online -d www.virenderparsariya.online"
+echo "     sudo certbot --nginx -d virenderparasariya.online -d www.virenderparasariya.online"
