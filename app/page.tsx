@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import SubscribeButton from "@/components/SubscribeButton";
 
 const now = {
   learning: "Agentic AI",
@@ -70,22 +71,7 @@ export default function Home() {
           </div>
 
           {/* Subscribe */}
-          <a
-            href="#"
-            style={{
-              background: "var(--black)",
-              color: "white",
-              padding: "10px 22px",
-              borderRadius: "999px",
-              fontSize: "13px",
-              fontWeight: 700,
-              textDecoration: "none",
-              display: "inline-block",
-              flexShrink: 0,
-            }}
-          >
-            Subscribe
-          </a>
+          <SubscribeButton />
         </div>
 
         {/* Divider */}
