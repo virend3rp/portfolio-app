@@ -4,9 +4,9 @@
     x="16"
     y="23"
     font-family="Georgia, serif"
-    font-size="20"
+    font-size="16"
     font-weight="900"
-    fill="white"
+    fill="#cc0000"
     text-anchor="middle"
-  >V</text>
+  >VP</text>
 </svg>
