@@ -1,0 +1,17 @@
+[Unit]
+Description=Portfolio Next.js Frontend
+After=network.target
+
+[Service]
+Type=simple
+User=ec2-user
+WorkingDirectory=/home/ec2-user/portfolio
+ExecStart=/usr/bin/node .next/standalone/server.js
+Restart=always
+RestartSec=10
+Environment=NODE_ENV=production
+Environment=PORT=3001
+Environment=HOSTNAME=127.0.0.1
+
+[Install]
+WantedBy=multi-user.target
